@@ -1,13 +1,12 @@
-const mod=require('./module'); 
+//const mod=require('./module'); 
+require('dotenv').config();
 const colors=require('colors');
-/*
-const fs=require('fs');
-let myfile=fs.readFileSync('./src/text.txt');
-console.log(myfile.toString());
-*/
 
 console.log(process.version.red);
 
-console.log(appname.blue, version.green);
+//console.log(appname.blue, version.green);
+//console.log(mod);
 
-console.log(mod);
+console.log(process.versions);
+
+console.log(process.env.PORT);
