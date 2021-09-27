@@ -7,6 +7,5 @@ console.log(process.version.red);
 //console.log(appname.blue, version.green);
 //console.log(mod);
 
-console.log(process.versions);
 
 console.log(process.env.PORT);
