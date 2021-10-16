@@ -1,41 +1,25 @@
-const server=require("http");
-const fs=require('fs');
-const { env } = require("process");
+const express=require('express');
+const ip='127.0.0.1';
 require('dotenv').config();
 
-const app=server.createServer((req,res)=>{
-    //res.statusCode=200;
-    //res.setHeader('Content-Type','text/html');
-    res.writeHead(200,{'Content-Type':'text/html'});
-    // res.write(req.url + "<br>");
-    // res.write(req.method + "<br>");
-    // res.write(req.headers.host+  "<br>");
-    // res.write("<h1>");
-    // res.write("hello http server");
-    // res.write("</h1>");
-    // res.end();
 
-    if( req.url=="/" && req.method=="GET"){
-        fs.readFile("src/index.html",(err,data)=>{
-            if(err){
-                res.writeHead(404);
-                res.write(err);
-                res.end();
-            }
-            else{
-                res.writeHead(200);
-                res.write(data);
-                res.end();
-            }
-        });
-    }
-    else{
-        res.writeHead(404);
-        res.end("Error");
-    }
 
+/* express().use((req,res)=>{
+    res.end("Express JS");
+}).listen(process.env.PORT); */
+
+const app=express();
+app.use(express.static('src/public'));
+
+app.use((req,res,next)=>{
+    console.log(`App starts at ${Date()}`);
+    next();
 });
 
-app.listen(process.env.PORT,()=>{
-    console.log(`http server starts at http://127.0.0.1:${process.env.PORT}`);
+app.use((req,res)=>{
+    res.status(200).send("Hello Express js");
+});
+
+app.listen(process.env.PORT,ip,()=>{
+    console.log(`App running at http://${ip}:${process.env.PORT}`);
 });
