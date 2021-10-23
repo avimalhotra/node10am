@@ -1,9 +1,20 @@
+const { query } = require('express');
 const express=require('express');
 require('dotenv').config();
-
 const app=express();
-//app.use(express.static('src/public'));
 
+const bodyParser=require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false })); 
+
+let admin=require('./route/admin');
+let user=require('./route/user');
+
+app.use('/admin',admin);
+app.use('/user',user);
+
+
+app.use(express.static('src/public'));
 
 /* app.use((req,res,next)=>{
     console.log(`App starts at ${Date()}`);
@@ -20,7 +31,6 @@ app.get('/',(req,res)=>{
     //res.status(200).json({"name":"aaa"});
     //res.status(200).send(req.url);
     //res.status(200).send(req.method);
-    
 });
 
 app.get('/login',(req,res)=>{
@@ -52,8 +62,17 @@ app.get('/post',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     res.status(200).send("Post page");
 });
-app.post('/post',(req,res)=>{
-    res.send("post data");
+
+
+// get amd post form data
+app.get('/getform',(req,res)=>{
+    let search=req.query;
+    res.status(200).send(`You searched : ${search.q}`);
+});
+app.post('/postform',(req,res)=>{
+    console.log(req.body);
+    //res.send(req.body);
+    res.send(`hello ${req.body.email}`);
 });
 
 // wild card handler 
@@ -61,7 +80,6 @@ app.get('/**',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     res.status(404).send("page not found ");
 });
-
 
 
 

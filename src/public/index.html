@@ -24,6 +24,23 @@
         <a href="/contact">Contact</a>
         <br>
         <img src="./icon.png" alt="">
+
+        <fieldset>
+            <legend>HTTP Get</legend>
+            <form action="/getform" method="get">
+            <label>Search : <input type="search" name="q" required></label>
+              <button>Search</button>
+            </form>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>HTTP Post</legend>
+            <form action="/postform" method="post">
+                <label>Email : <input type="email" name="email" required></label>
+                <label>Password : <input type="password" name="pass" required></label>
+                  <button>Send</button>
+            </form>
+        </fieldset>
     </div>
 </body>
 </html>
