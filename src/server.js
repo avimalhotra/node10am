@@ -6,6 +6,21 @@ const app=express();
 const bodyParser=require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); 
+const cookie=require('cookie-parser');
+
+app.use(cookie());
+
+const session=require('express-session');
+app.set('trust proxy', 1); 
+app.use(session({
+    secret:"session",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{secure:false}
+}));
+
+
+
 
 let admin=require('./route/admin');
 let user=require('./route/user');
@@ -14,7 +29,7 @@ app.use('/admin',admin);
 app.use('/user',user);
 
 
-app.use(express.static('src/public'));
+//app.use(express.static('src/public'));
 
 /* app.use((req,res,next)=>{
     console.log(`App starts at ${Date()}`);
@@ -27,15 +42,20 @@ app.use(express.static('src/public'));
 
 app.get('/',(req,res)=>{
     res.setHeader('Content-Type','text/html');
-    res.status(200).send("home page");
+    //res.status(200).send("home page");
     //res.status(200).json({"name":"aaa"});
     //res.status(200).send(req.url);
     //res.status(200).send(req.method);
+    //console.log(req.cookies.id,req.cookies.name,req.cookies.city);
+    //res.cookie("name","avinash", {maxAge:86400, httpOnly: true});
+    //res.status(200).send(req.cookies);
+    res.status(200).send(req.sessionID);
 });
 
 app.get('/login',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     res.status(200).send("login page");
+
 });
 
 app.get('/contact',(req,res)=>{
@@ -80,7 +100,6 @@ app.get('/**',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     res.status(404).send("page not found ");
 });
-
 
 
 app.listen(process.env.PORT,()=>{
