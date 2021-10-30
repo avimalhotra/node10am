@@ -2,6 +2,7 @@ const { query } = require('express');
 const express=require('express');
 require('dotenv').config();
 const app=express();
+const parseurl=require('parseurl');
 
 const bodyParser=require('body-parser');
 app.use(bodyParser.json());
@@ -16,9 +17,8 @@ app.use(session({
     secret:"session",
     resave:false,
     saveUninitialized:true,
-    cookie:{secure:false}
+    cookie:{secure:false,maxAge:60000},
 }));
-
 
 
 
@@ -40,6 +40,20 @@ app.use('/user',user);
     res.status(200).send("Hello Express js");           // write and end
 }); */
 
+app.use( (req, res, next)=> {
+    if (!req.session.views) {
+      req.session.views = {};
+    }
+  
+    // get the url pathname
+    var pathname = parseurl(req).pathname;
+  
+    // count the views
+    req.session.views.pathname = (req.session.views.pathname || 0) + 1;
+  
+    next()
+  })
+
 app.get('/',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     //res.status(200).send("home page");
@@ -49,13 +63,21 @@ app.get('/',(req,res)=>{
     //console.log(req.cookies.id,req.cookies.name,req.cookies.city);
     //res.cookie("name","avinash", {maxAge:86400, httpOnly: true});
     //res.status(200).send(req.cookies);
-    res.status(200).send(req.sessionID);
+    req.session.lang="en";
+    res.status(200).send(`id: ${req.sessionID}, lang: ${req.session.lang}, pageviews: ${req.session.views.pathname}`);
+
+});
+
+var data=["sun","mon","tues","wed","thurs","fri","sat"];
+
+app.get('/api',(req,res)=>{
+    res.header('Access-Control-Allow-Origin',"*");
+    return res.send(data);
 });
 
 app.get('/login',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     res.status(200).send("login page");
-
 });
 
 app.get('/contact',(req,res)=>{
