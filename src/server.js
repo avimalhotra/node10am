@@ -5,8 +5,12 @@ const app=express();
 const parseurl=require('parseurl');
 
 const bodyParser=require('body-parser');
+//app.use(bodyParser.text());
 app.use(bodyParser.json());
+
+
 app.use(bodyParser.urlencoded({ extended: false })); 
+
 const cookie=require('cookie-parser');
 
 app.use(cookie());
@@ -29,7 +33,7 @@ app.use('/admin',admin);
 app.use('/user',user);
 
 
-//app.use(express.static('src/public'));
+app.use(express.static('src/public'));
 
 /* app.use((req,res,next)=>{
     console.log(`App starts at ${Date()}`);
@@ -68,11 +72,21 @@ app.get('/',(req,res)=>{
 
 });
 
-var data=["sun","mon","tues","wed","thurs","fri","sat"];
+const data=["sun","mon","tues","wed","thurs","fri","sat"];
+//const data={name:"aaa",id:22};
 
 app.get('/api',(req,res)=>{
     res.header('Access-Control-Allow-Origin',"*");
     return res.send(data);
+});
+app.post('/checkday',(req,res)=>{
+    let day=req.body.day;                   // 0-6
+    
+    let dayname=data[day];
+    
+    //res.header('Access-Control-Allow-Origin',"*");
+    
+    return res.send(dayname);
 });
 
 app.get('/login',(req,res)=>{

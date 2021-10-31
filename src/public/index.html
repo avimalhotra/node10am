@@ -22,8 +22,9 @@
         <a href="/">Home</a>
         <a href="/login">Login</a>
         <a href="/contact">Contact</a>
+        <a href="/api">API</a>
         <br>
-        <img src="./icon.png" alt="">
+        <img src="./icon.png" alt="" width="192" height="192">
 
         <fieldset>
             <legend>HTTP Get</legend>
@@ -40,7 +41,55 @@
                 <label>Password : <input type="password" name="pass" required></label>
                   <button>Send</button>
             </form>
+           
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>AJAX API</legend>
+            <form action="/checkday" method="post" class="checkday">
+                <label>
+                    Day: <input type="number" name="day" required min="1" max="7">
+                </label>
+               
+                <button>Check</button>
+                <span></span>
+            </form>
         </fieldset>
     </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
+<script>
+/*
+document.querySelector(".checkday input").addEventListener("input",function(e){
+    //e.preventDefault();
+
+ var xhr=new XMLHttpRequest();
+
+xhr.open("post","http://127.0.0.1:8080/checkday");
+xhr.send('day:'+this.value);
+
+xhr.onload=function(){
+        if( this.readyState==4 && this.status==200){
+               // console.log(typeof JSON.parse(this.response));
+               let data=this.response;
+               //data=JSON.parse(data);
+                console.log(data);
+        }
+        else{
+            console.log("error");
+        }
+};
+})*/
+
+$(".checkday").submit(function(e){
+    e.preventDefault();
+    var day=$(this).find("input").val();
+  
+    $.post( "/checkday",{day:day}, function( data ) {
+        
+     $( ".checkday span" ).html( data );
+    });
+
+})
+</script>    
 </body>
 </html>
