@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP</title>
+    <style>
+        *{ margin: 0; box-sizing: border-box;}
+        body{
+            font-family: system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        .container{
+            max-width: 1200px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello Express JS</h1>
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/contact">Contact</a>
+        <a href="/api">API</a>
+        <br>
+        <img src="./icon.png" alt="" width="192" height="192">
+
+        <fieldset>
+            <legend>HTTP Get</legend>
+            <form action="/getform" method="get">
+            <label>Search : <input type="search" name="q" required></label>
+              <button>Search</button>
+            </form>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>HTTP Post</legend>
+            <form action="/postform" method="post">
+                <label>Email : <input type="email" name="email" required></label>
+                <label>Password : <input type="password" name="pass" required></label>
+                  <button>Send</button>
+            </form>
+           
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>AJAX API</legend>
+            <form action="/checkday" method="post" class="checkday">
+                <label>
+                    Day: <input type="number" name="day" required min="1" max="7">
+                </label>
+               
+                <button>Check</button>
+                <span></span>
+            </form>
+        </fieldset>
+    </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
+<script>
+/*
+document.querySelector(".checkday input").addEventListener("input",function(e){
+    //e.preventDefault();
+
+ var xhr=new XMLHttpRequest();
+
+xhr.open("post","http://127.0.0.1:8080/checkday");
+xhr.send('day:'+this.value);
+
+xhr.onload=function(){
+        if( this.readyState==4 && this.status==200){
+               // console.log(typeof JSON.parse(this.response));
+               let data=this.response;
+               //data=JSON.parse(data);
+                console.log(data);
+        }
+        else{
+            console.log("error");
+        }
+};
+})*/
+
+$(".checkday").submit(function(e){
+    e.preventDefault();
+    var day=$(this).find("input").val();
+  
+    $.post( "/checkday",{day:day}, function( data ) {
+        
+     $( ".checkday span" ).html( data );
+    });
+
+})
+</script>    
+</body>
+</html>
