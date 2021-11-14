@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/ejs"
-   
+    "start": "nodemon src/server"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +19,7 @@
     "express-session": "^1.17.2",
     "network-list": "^1.1.5",
     "network-speed": "^2.1.1",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "nunjucks": "^3.2.3"
   }
 }

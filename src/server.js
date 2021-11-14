@@ -3,6 +3,9 @@ const express=require('express');
 require('dotenv').config();
 const app=express();
 const parseurl=require('parseurl');
+const nunjucks=require('nunjucks');
+const path=require("path");
+
 
 const bodyParser=require('body-parser');
 //app.use(bodyParser.text());
@@ -35,6 +38,13 @@ app.use('/user',user);
 
 app.use(express.static('src/public'));
 
+nunjucks.configure(path.resolve(__dirname,'public'),{
+    express:app,
+    autoscape:true,
+    noCache:false,
+    watch:true
+});
+
 /* app.use((req,res,next)=>{
     console.log(`App starts at ${Date()}`);
     next();
@@ -58,6 +68,8 @@ app.use( (req, res, next)=> {
     next()
   })
 
+  const data=["sun","mon","tues","wed","thurs","fri","sat"];
+
 app.get('/',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     //res.status(200).send("home page");
@@ -67,12 +79,13 @@ app.get('/',(req,res)=>{
     //console.log(req.cookies.id,req.cookies.name,req.cookies.city);
     //res.cookie("name","avinash", {maxAge:86400, httpOnly: true});
     //res.status(200).send(req.cookies);
-    req.session.lang="en";
-    res.status(200).send(`id: ${req.sessionID}, lang: ${req.session.lang}, pageviews: ${req.session.views.pathname}`);
+    //req.session.lang="en";
+    //res.status(200).send(`id: ${req.sessionID}, lang: ${req.session.lang}, pageviews: ${req.session.views.pathname}`);
+    res.render('home.html',{name:"Nunjucks", month:data, user:{name:"aaa",id:222}});
 
 });
 
-const data=["sun","mon","tues","wed","thurs","fri","sat"];
+
 //const data={name:"aaa",id:22};
 
 app.get('/api',(req,res)=>{
@@ -91,7 +104,8 @@ app.post('/checkday',(req,res)=>{
 
 app.get('/login',(req,res)=>{
     res.setHeader('Content-Type','text/html');
-    res.status(200).send("login page");
+    //res.status(200).send("login page");
+    res.render('login.html',{name:"Login page", data:{id:212, login:new Date().toLocaleString()}});
 });
 
 app.get('/contact',(req,res)=>{
