@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{name}}</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        {% include "header.html" %}
+        {% include "nav.html" %}
+           <main>
+            <h2>Pincode result</h2>
+            <br>
+            
+            <p>{{data.length}} Pincodes found</p>
+            <p>{{nodata}}</p>
+            <br>
+          <table>
+              <tr><th>Pincode</th><th>Office Name</th><th>City</th><th>District</th><th>State</th></tr>
+            {% for i in data %}   
+            <tr>
+                <td>{{i.pincode}}</td>
+                <td>{{i.officeName}}</td>
+                <td>{{i.taluk}}</td>
+                <td>{{i.districtName}}</td>
+                <td>{{i.stateName}}</td>
+            </tr>
+            {% endfor %} 
+          </table>
+          <br>
+           <div>
+               <h3>Search Another Pincode</h3>
+            <form action="/searchpin" method="get">
+                <div class="form-group">
+                    <label>Pincode: <input type="search" autocomplete="off" pattern="^[0-9]{6}$" name="pin" required placeholder="Search Pincode"></label>
+                    <button class="btn">Search</button>
+                </div>
+            </form>
+           </div>
+           </main>
+           {% include "footer.html" %}
+    </div>
+</body>
+</html>        

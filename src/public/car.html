@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{name}}</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        {% include "header.html" %}
+        {% include "nav.html" %}
+           <main>
+            <h2>Search car </h2>
+           <div>
+               <form action="/searchcar" method="get">
+                   <div class="form-group">
+                       <label>Car Name: <input type="search" autocomplete="off" name="query" required placeholder="Search Cars"></label>
+                  
+                       <button class="btn">Search</button>
+                   </div>
+               </form>
+           </div>
+           <br>
+           <div>
+            <form action="/searchpin" method="get">
+                <div class="form-group">
+                    <label>Pincode: <input type="search" autocomplete="off" pattern="^[0-9]{6}$" name="pin" required placeholder="Search Pincode" value="201301"></label>
+                    <button class="btn">Search</button>
+                </div>
+            </form>
+           </div>
+           </main>
+           {% include "footer.html" %}
+    </div>
+</body>
+</html>        

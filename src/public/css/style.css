@@ -10,3 +10,5 @@ header{ padding: 10px; background: #ccc;}
 nav{ padding: 10px; background: #fdb8b8;}
 main{ padding: 10px; background: #b0f5a4;}
 footer{ padding: 10px; background: #76d6f3;}
+table{ border-collapse: collapse; border: 1px solid #000;}
+table td, table th{ border: 1px solid #000; padding: 5px;}

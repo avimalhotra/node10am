@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{data[0].name}}</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        {% include "header.html" %}
+        {% include "nav.html" %}
+           <main>
+            <h2>Search car </h2>
+           <div>
+               <form action="/searchcar" method="get">
+                   <div class="form-group">
+                       <label>Car Name: <input type="search" name="query" required placeholder="Search Cars"></label>
+                  
+                       <button class="btn">Search</button>
+                   </div>
+               </form>
+               <h2>Search results  for {{data[0].name}}</h2>
+               <p>{{nodata}}</p>
+               <div>
+                <ol>
+                    {% for i in data %}   
+                         <li>Name: {{ i.name }}</li>
+                         <li>Type: {{ i.type }}</li>
+                         <li>Price: {{ i.price }}</li>
+                    {% endfor %}    
+                </ol>
+               </div>
+               
+           </div>
+           </main>
+           {% include "footer.html" %}
+    </div>
+</body>
+</html>        

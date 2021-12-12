@@ -5,6 +5,15 @@ const app=express();
 const parseurl=require('parseurl');
 const nunjucks=require('nunjucks');
 const path=require("path");
+const db=require('./dao');
+const car=require('./models/car');
+const pin=require('./models/pin');
+
+
+db.on('error', function (err) { throw err }); 
+db.once('open', function() {
+   console.log('DB connected!');
+});
 
 
 const bodyParser=require('body-parser');
@@ -90,7 +99,45 @@ app.get('/',(req,res)=>{
 
 app.get('/api',(req,res)=>{
     res.header('Access-Control-Allow-Origin',"*");
-    return res.send(data);
+    //return res.send(data);
+    car.find({},(err,data)=>{
+        if(err){ console.log(err); db.close()}
+        else{
+            if(data.length==0){ 
+                return res.send("no data found");
+                db.close()  }
+            else{
+                return res.send(data);
+                db.close();
+            }
+        }
+   });
+});
+app.get('/searchpin',(req,res)=>{
+    pin.find({pincode:req.query.pin},(err,data)=>{
+        if(err){ console.log(err); db.close()}
+        else{
+            if(data.length==0){ 
+                 res.render('pincode.html',{nodata:"no Pincode found"});
+            }
+            else{
+                res.render('pincode.html',{data:data});
+                
+            }
+        }
+   });
+});
+app.get('/pinapi',(req,res)=>{
+    
+    res.header('Access-Control-Allow-Origin',"*");
+
+    pin.find({pincode:req.query.pin},(err,data)=>{
+        if(err){ console.log(err); db.close()}
+        else{
+
+            return res.status(200).send(data)
+        }
+   });
 });
 app.post('/checkday',(req,res)=>{
     let day=req.body.day;                   // 0-6
@@ -111,6 +158,28 @@ app.get('/login',(req,res)=>{
 app.get('/contact',(req,res)=>{
     res.setHeader('Content-Type','text/html');
     res.status(200).send("Contact page");
+});
+app.get('/car',(req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    res.status(200).render('car.html',{name:"Cars"});
+});
+app.get('/searchcar',(req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    let name=req.query.query;
+
+    car.find({name:name},(err,data)=>{
+        if(err){ console.log(err); db.close()}
+        else{
+            if(data.length==0){ 
+                res.render('searchcar.html',{nodata:"No car found"});  
+                 }
+            else{
+                res.render('searchcar.html',{data:data}); 
+                
+            }
+        }
+   });
+    //res.status(200).render('searchcar.html',{name:"Cars"});
 });
 app.get('/search',(req,res)=>{
     res.setHeader('Content-Type','text/html');
