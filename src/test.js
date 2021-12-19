@@ -8,4 +8,4 @@ console.log(__dirname);
 require('./module');
 //const fs=require('fs');
 
-console.log(appname,version);
+console.log(appname, version);

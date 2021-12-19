@@ -8,6 +8,7 @@ const path=require("path");
 const db=require('./dao');
 const car=require('./models/car');
 const pin=require('./models/pin');
+const user=require('./models/users');
 
 
 db.on('error', function (err) { throw err }); 
@@ -36,15 +37,17 @@ app.use(session({
     cookie:{secure:false,maxAge:60000},
 }));
 
-
-
 let admin=require('./route/admin');
-let user=require('./route/user');
-
-app.use('/admin',admin);
-app.use('/user',user);
+//let user=require('./route/user');
 
 
+/* app.use((req,res,next)=>{
+    console.log(`App starts at ${Date()}`);
+     next();
+}); */
+
+let passport = require('passport');
+let LocalStrategy = require('passport-local').Strategy;
 app.use(express.static('src/public'));
 
 nunjucks.configure(path.resolve(__dirname,'public'),{
@@ -54,14 +57,64 @@ nunjucks.configure(path.resolve(__dirname,'public'),{
     watch:true
 });
 
-/* app.use((req,res,next)=>{
-    console.log(`App starts at ${Date()}`);
-    next();
-}); */
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser( (user, done)=> {
+    done(null, user.id);
+  });
+passport.deserializeUser( (user, next)=> {
+    next(null, user);
+});
 
-/* app.use((req,res)=>{
-    res.status(200).send("Hello Express js");           // write and end
-}); */
+passport.use('local', new LocalStrategy((name, password, done) => {
+   
+    user.findOne({ name: name }, (err, user) => { 
+      if (err) { return done(err); }
+      if (!user) { return done(null, null, { message: 'No user found!' }); }
+      if (user.password !== password) {
+        return done(null, null, { message: 'Username or password is incorrect!' });
+      }
+      return done(null, user, null);
+    });
+  }
+));
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      next();
+    } else {
+      res.status(403).send('Forbidden');
+    }
+  }
+ 
+  app.get('/adminlogin', isAuthenticated, (req, res) => { res.render('admin-login.html') });
+
+app.post("/postform",(req,res)=>{
+        
+    passport.authenticate('local', function (err, user, info) {
+        
+        if (err) {
+          res.render('login.html', { error: err });
+        } else if (!user) {
+          res.render('login.html', { errorMessage: info.message });
+    
+        } else {
+          //setting users in session
+          req.logIn(user, function (err) {
+            if (err) {
+               
+              res.render('login.html', { error: err });
+            } else {
+              res.render('admin-login.html',{ name:user.name});
+            }
+          })
+        }
+      })(req, res);
+
+});
+
+
+
+
 
 app.use( (req, res, next)=> {
     if (!req.session.views) {
@@ -208,11 +261,11 @@ app.get('/getform',(req,res)=>{
     let search=req.query;
     res.status(200).send(`You searched : ${search.q}`);
 });
-app.post('/postform',(req,res)=>{
+/* app.post('/postform',(req,res)=>{
     console.log(req.body);
     //res.send(req.body);
-    res.send(`hello ${req.body.email}`);
-});
+    res.send(`hello ${req.body.email}`); 
+}); */
 
 // wild card handler 
 app.get('/**',(req,res)=>{

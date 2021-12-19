@@ -13,9 +13,21 @@
         {% include "nav.html" %}
            <main>
             <h2>Main </h2>
-           <div>
-               <p>id is {{data.id}} and login at {{data.login}}</p>
-           </div>
+         
+           <section>
+               <h2>Admin Login</h2>
+               <p>{{error}}</p>
+               <p>{{errorMessage}}</p>
+               <fieldset>
+                <legend>HTTP Post</legend>
+                <form action="/postform" method="post">
+                    <label>Name : <input type="text" value="avi" name="name" required></label>
+                    <label>Password : <input type="password" value="123456" name="password" required></label>
+                    <button>Send</button>
+                </form>
+
+            </fieldset>
+           </section>
            </main>
            {% include "footer.html" %}
     </div>
