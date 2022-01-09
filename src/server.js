@@ -5,10 +5,10 @@ const app=express();
 const parseurl=require('parseurl');
 const nunjucks=require('nunjucks');
 const path=require("path");
-const db=require('./dao');
-const car=require('./models/car');
-const pin=require('./models/pin');
-const user=require('./models/users');
+//const db=require('./dao');
+//const car=require('./models/car');
+//const pin=require('./models/pin');
+//const user=require('./models/users');
 const bodyParser=require('body-parser');
 //app.use(bodyParser.text());
 app.use(bodyParser.json());
@@ -30,24 +30,26 @@ app.use(session({
 
 
 
-db.on('error', function (err) { throw err }); 
+/* db.on('error', function (err) { throw err }); 
 db.once('open', function() {
    console.log('DB connected!');
 });
+ */
 
 
-
-let admin=require('./route/admin');
+//let admin=require('./route/admin');
 //let user=require('./route/user');
 
 
 /* app.use((req,res,next)=>{
     console.log(`App starts at ${Date()}`);
      next();
-}); */
+}); 
 
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
+*/
+
 app.use(express.static('src/public'));
 
 nunjucks.configure(path.resolve(__dirname,'public'),{
@@ -56,7 +58,7 @@ nunjucks.configure(path.resolve(__dirname,'public'),{
     noCache:false,
     watch:true
 });
-
+/*
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -90,6 +92,7 @@ function isAuthenticated(req, res, next) {
   }
  
 app.get('/adminlogin', isAuthenticated, (req, res) => {  res.render('admin-login.html') });
+
 app.get('/logout', (req, res) => { 
     if (req.session) {
         req.session.destroy((err)=> {
@@ -106,6 +109,7 @@ app.get('/logout', (req, res) => {
         });
       }
 });
+*/
 
 app.post("/postform",(req,res)=>{
     passport.authenticate('local', function (err, user, info) {
@@ -190,7 +194,7 @@ app.get('/searchpin',(req,res)=>{
         }
    });
 });
-app.get('/pinapi',(req,res)=>{
+/* app.get('/pinapi',(req,res)=>{
     
     res.header('Access-Control-Allow-Origin',"*");
 
@@ -201,7 +205,7 @@ app.get('/pinapi',(req,res)=>{
             return res.status(200).send(data)
         }
    });
-});
+}); */
 app.post('/checkday',(req,res)=>{
     let day=req.body.day;                   // 0-6
     
